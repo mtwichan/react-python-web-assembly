@@ -1,10 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 import MyWorker from "../workers/myWorkerPython?worker"; // Use worker-loader for the Web Worker
+import Plot from "react-plotly.js";
 
 type WorkerResponse =
   | { type: "ready" }
   | { type: "result"; data: string }
   | { type: "error"; error: string };
+
+const PlotlyGraph = ({ graphData }: { graphData: unknown }) => {
+  // Parse the JSON string if it hasn't been parsed already
+  const plotData =
+    typeof graphData === "string" ? JSON.parse(graphData) : graphData;
+
+  return (
+    <Plot
+      data={plotData.data}
+      layout={plotData.layout}      
+    />
+  );
+};
 
 export const Graph = () => {
   const workerRef = useRef<Worker | null>(null);
@@ -37,7 +51,7 @@ export const Graph = () => {
       workerRef.current.postMessage({
         type: "executeScript",
         scriptUrl: "/python/script.py",
-        variables: { data: { A: [10, 20, 30], B: [40, 50, 60] } },
+        variables: { data: { A: [1, 2, 3], B: [4, 5, 6] } },
       });
     }
   };
@@ -52,6 +66,7 @@ export const Graph = () => {
         <div>
           <h2>Result:</h2>
           <pre>{result}</pre>
+          <PlotlyGraph graphData={result} />
         </div>
       )}
     </div>

@@ -19,7 +19,11 @@ const initializePyodide = async () => {
   pyodide = await loadPyodide({
     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/",
   });
-  await pyodide.loadPackage(["numpy", "pandas"]); // Preload commonly used packages
+  await pyodide.loadPackage(["numpy", "pandas", "micropip"]); // Preload commonly used packages
+  await pyodide.runPythonAsync(`
+    import micropip
+    await micropip.install('plotly')
+`);
   postMessage({ type: "ready" } as WorkerResponse);
 };
 
