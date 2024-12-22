@@ -36,7 +36,7 @@ export const Graph = () => {
     if (workerRef.current) {
       workerRef.current.postMessage({
         type: "executeScript",
-        scriptUrl: "/script.py",
+        scriptUrl: "/python/script.py",
         variables: { data: { A: [10, 20, 30], B: [40, 50, 60] } },
       });
     }
