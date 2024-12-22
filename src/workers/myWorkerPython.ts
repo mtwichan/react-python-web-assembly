@@ -60,8 +60,8 @@ onmessage = async (event: MessageEvent<WorkerMessage>) => {
     console.log("response fetch (worker)", response);
     const pythonCode = await response.text();
     console.log("python code (worker)", pythonCode);
-    const result = pyodide.runPython(pythonCode); // Execute the Python code
-    console.log("result python code (worker)", result);
+    const result = await pyodide.runPythonAsync(pythonCode); // Execute the Python code
+    // console.log("result python code (worker)", result);
     postMessage({ type: "result", data: result } as WorkerResponse);
   } catch (error: unknown) {
     postMessage({
